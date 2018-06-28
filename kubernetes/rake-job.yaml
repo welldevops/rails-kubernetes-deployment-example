@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: deploy-tasks
+  namespace: $NAMESPACE
+spec:
+  template:
+    metadata:
+      name: deploy-tasks
+      labels:
+        name: deploy-tasks
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: deploy-tasks-runner
+          image: $IMAGE
+          command: ["./kubernetes/rake_tasks.sh"]

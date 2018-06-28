@@ -1,0 +1,18 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: example-cron
+  namespace: $NAMESPACE
+spec:
+  schedule: "0 6 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: example-cron
+            image: $IMAGE
+            command: ["bin/rake", "YOUR_COMMAND_HERE"]

@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1 # for versions before 1.8.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: $DEPLOY_NAME
+  namespace: $NAMESPACE
+spec:
+  replicas: $REPLICAS
+  selector:
+    matchLabels:
+      app: $DEPLOY_NAME
+      environment: $NAMESPACE
+  revisionHistoryLimit: 5
+  template:
+    metadata:
+      labels:
+        app: $DEPLOY_NAME
+        environment: $NAMESPACE
+    spec:
+      containers:
+      - name: $DEPLOY_NAME
+        image: $IMAGE
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /users/sign_in
+            port: 3000
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /users/sign_in
+            port: 3000
+          timeoutSeconds: 30
+          initialDelaySeconds: 30
